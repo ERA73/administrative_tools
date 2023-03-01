@@ -1,0 +1,23 @@
+virtualenv env
+env\Scripts\activate
+
+pip install django
+pip install djangorestframework
+pip install django-rest-swagger
+
+pip freeze > Requirements.txt
+
+django-admin startproject administrative
+cd administrative
+django-admin startapp prima_servicios
+python manage.py migrate
+python manage.py createsuperuser --email admin@example.com --username admin
+
+
+# Add into INSTALLED_APPS : (administrative >> administrative >> settings.py >> INSTALLED_APPS) 
+    'rest_framework',
+    'drf_yasg',
+# Add into urlpatterns : (administrative >> administrative >> urls.py >> urlpatterns) 
+    path('', include('api.prima_servicios.urls')),
+    path('docs', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    path('redocs', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
